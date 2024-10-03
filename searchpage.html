@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Glossary Search Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+        .search-btn {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-btn:hover {
+            background-color: #0056b3;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9f7ef;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Search Glossary</h1>
+        <form id="searchForm">
+            <input type="text" id="searchWord" class="search-box" placeholder="Enter word to search in glossary...">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+        <div id="result" class="result-box" style="display:none;"></div>
+    </div>
+
+    <script>
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission
+            const searchWord = document.getElementById('searchWord').value;
+
+            // Send word to search API (could be another PHP file or an API endpoint)
+            fetch(`search_word.php?word=${searchWord}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.found) {
+                        document.getElementById('result').innerHTML = `<strong>Definition:</strong> ${data.definition}`;
+                    } else {
+                        document.getElementById('result').innerHTML = "Word not found in glossary.";
+                    }
+                    document.getElementById('result').style.display = "block";
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Glossary Word</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #fff5e1;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .input-box, .definition-box {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background-color: #ffe4c4;
+        }
+        .submit-btn {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Submit a New Word to Glossary</h1>
+        <form id="glossaryForm">
+            <label for="word">Word:</label><br>
+            <input type="text" id="word" name="word" class="input-box" placeholder="Enter word"><br>
+
+            <label for="definition">Definition:</label><br>
+            <textarea id="definition" name="definition" class="definition-box" rows="4" placeholder="Enter definition"></textarea><br>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("glossaryForm").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent form from submitting the default way
+
+            // Get form data
+            const word = document.getElementById("word").value;
+            const definition = document.getElementById("definition").value;
+
+            // Send data to the server
+            const formData = new FormData();
+            formData.append("word", word);
+            formData.append("definition", definition);
+
+            fetch("send_to_telegram.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                alert("Word and definition submitted to Telegram!");
+                document.getElementById("glossaryForm").reset(); // Clear the form after submission
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });
+    </script>
+</body>
+</html>
